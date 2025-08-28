@@ -1,0 +1,19 @@
+{
+  "name": "electron_frontend",
+  "version": "1.0.0",
+  "description": "desktop application for react ",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ./main.js"
+  },
+  "author": "Excellent Mashengete",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.0.0",
+    "electron": "^37.4.0",
+    "electron-builder": "^26.0.12",
+    "wait-on": "^8.0.4"
+  }
+}
