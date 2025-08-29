@@ -1,13 +1,14 @@
 import ApiClient from "../service/ApiClient";
 import { useState, useEffect } from 'react'
 import { validateEmail, validateName, validateDateHired } from '../utils/validations';
-import {Success, Error} from "../utils/toastType";
+import { Success, Error } from "../utils/toastType";
 
 function Modal({ user, onSave, onClose }) {
     const initialFormState = {
-        id: null,
+        employeeNo: null,
         fullName: '',
         email: '',
+        position: '',
         salary: '',
         dateHired: '',
         isActive: 1,
@@ -19,7 +20,7 @@ function Modal({ user, onSave, onClose }) {
     useEffect(() => {
         if (user) {
             setFormData(user);
-        }else{
+        } else {
             setLocalErrors({});
             setFormData(initialFormState);
         }
@@ -63,32 +64,33 @@ function Modal({ user, onSave, onClose }) {
         try {
             if (!validateForm()) return;
             let response;
-            if (formData.id) {
+            if (formData.employeeNo != null) {
                 var result = await ApiClient.updateEmployee(formData.id, formData);
-                if(!result.success) {
+                if (!result.data.success) {
                     onClose();
-                    Error(result.message || "Error updating employee" );
+                    Error(result.message || "Error updating employee");
                     return;
                 }
                 Success("employee updated successfully");
-                response = result;
+                response = result.data.employee;
             } {
                 var result = await ApiClient.createEmployee(formData);
 
-                if(!result.success) {
+                if (!result.data.success) {
                     onClose();
                     Error(result.message || "Error creating employee");
                     return;
                 }
 
-                Success("employee created successfully" );
-                response = result;
+                Success("employee created successfully");
+                response = result.data.employee;
             }
             onSave(response);
             onClose();
         } catch (error) {
-            Error("Error saving employee" );
-            console.error("Error saving employee:", error);
+            const allErrors = Object.values(error.response.data.errors).flat().join(' -- ');
+            Error(allErrors);
+            console.error("Error creating employee", error);
         }
     };
 

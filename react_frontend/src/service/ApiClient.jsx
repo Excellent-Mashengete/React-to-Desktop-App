@@ -1,47 +1,103 @@
 import axios from 'axios';
 
-class ApiClient {
-    constructor() {
-        this.client = axios.create({
-            baseURL: 'http://localhost:5000/api',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-        });
-    }
+const baseURL = `http://localhost:5004/api`;
 
-    async callApi(path, method, { data = null, params = null } = {}) {
-        const response = await this.client.request({
-            url: path,
-            method: method,
-            data: data,
-            params: params,
-        });
+const ApiClient = {
 
-        return response.data;
-    }
-
-    async getAllEmployees() {
-        return this.client.get('/test/employees', 'GET');
-    }
-
-    async getEmployeeById(employeeId) {
-        let url = '/test/employees'
-        if (employeeId) {
-            url += `/?employee=${employeeId}`;
+    getAllEmployees: async () => {
+        try {
+            const response = await axios.get(
+                `${baseURL}/test/employees`,
+                {
+                    timeout: 3000,
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                },
+            );
+            return response;
+        } catch (err) {
+            if (err.code === 'ECONNABORTED') {
+                console.log('The request timed out.');
+            } else {
+                console.log(err);
+            }
         }
-        return this.client.post(url, 'GET');
-    }
+    },
 
-    async createEmployee(employeeData) {
-        return this.client.post('/test/employees', employeeData);
-    }
+    getEmployeeById: async (employeeId) => {
+        try {
+            let url = `${baseURL}/test/employee`
+            if (employeeId) {
+                url += `/?employee=${employeeId}`;
+            }
+            const response = await axios.get(url,
+                {
+                    timeout: 3000,
+                    headers: {
+                        Accept: 'application/json',
+                    }, r
+                },
+            );
+            return response;
+        } catch (err) {
+            if (err.code === 'ECONNABORTED') {
+                console.log('The request timed out.');
+            } else {
+                console.error("Error fetching employee by ID:", err);
+            }
+        }
+    },
 
-    async updateEmployee(employeeId, employeeData) {
-        return this.client.put(`/test/employees/${employeeId}`, employeeData);
-    }   
+    createEmployee: async (formData) => {
+        const data = {
+            FullName: formData.fullName,
+            Email: formData.email,
+            Position:  "Tester",
+            Salary: formData.salary,
+            DateHired: formData.dateHired,
+            IsDeleted: formData.isActive,
+            DepartmentId: 2,
+            IsDeleted: false
+        }
+        const response = await axios.post(`${baseURL}/test/addEmployee`, data, {
+            timeout: 3000,
+            headers: {
+                Accept: 'application/json',
+            },
+            }
+        );
+        return response;
+
+    },
+
+    updateEmployee: async (employeeId, formData) => {
+        try {
+            const data = {
+                FullName: formData.fullName,
+                Email: formData.email,
+                Position: formData.position ?? "hello",
+                Salary: formData.salary,
+                DateHired: formData.dateHired,
+                IsDeleted: formData.isActive,
+                DepartmentId: 2,
+                IsDeleted: 0
+            }
+            const response = await axios.post(`${baseURL}/test/employees/${employeeId}`, data, {
+                timeout: 3000,
+                headers: {
+                    Accept: 'application/json',
+                },
+            });
+            return response;
+        } catch (err) {
+            if (err.code === 'ECONNABORTED') {
+                console.log('The request timed out.');
+            } else {
+                console.error("Error fetching employee by ID:", err);
+            }
+        }
+    }
 }
 
-ApiClient.instance = new ApiClient();
 export default ApiClient;
