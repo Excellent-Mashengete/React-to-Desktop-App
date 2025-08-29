@@ -21,7 +21,7 @@ function App() {
         email: "brice.swyre@gmail.com",
         salary: 500,
         dateHired: "2003-10-10",
-        isActive: 1,
+        isDeleted: 1,
       },
     ]
   );
@@ -104,7 +104,7 @@ function App() {
                     <td>{user.salary}</td>
                     <td>{formatDate(user.dateHired)}</td>
                     <td>
-                      <StatusContainer data={{ status: user.isActive ? "inactive" : "Active", statusId: user.isActive }} />
+                      <StatusContainer data={{ status: user.isDeleted==true ? "inactive" : "Active", statusId: user.isDeleted }} />
                     </td>
                     <td>
                       <div className='flex gap-2 text-center justify-center'>

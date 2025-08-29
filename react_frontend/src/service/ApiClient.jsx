@@ -56,7 +56,6 @@ const ApiClient = {
             Position:  "Tester",
             Salary: formData.salary,
             DateHired: formData.dateHired,
-            IsDeleted: formData.isActive,
             DepartmentId: 2,
             IsDeleted: false
         }
@@ -79,7 +78,6 @@ const ApiClient = {
                 Position: formData.position ?? "hello",
                 Salary: formData.salary,
                 DateHired: formData.dateHired,
-                IsDeleted: formData.isActive,
                 DepartmentId: 2,
                 IsDeleted: 0
             }

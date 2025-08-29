@@ -51,6 +51,8 @@ This project contains two frontend applications: `electron_frontend` and `react_
 
 ---
 
+dotnet ef migrations add InitialCreate --project Employee.Data --startup-project Employee.Server 
+dotnet ef database update --project Employee.Data --startup-project Employee.Server
 ## Notes
 
 - Make sure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
